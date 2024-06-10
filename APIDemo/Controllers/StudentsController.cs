@@ -2,6 +2,7 @@
 using APIDemo.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Plugins;
 
 namespace APIDemo.Controllers
@@ -30,6 +31,47 @@ namespace APIDemo.Controllers
             _context.SaveChanges();
 
         }
+
+        [HttpPost]
+        public void InsertRange(List<StudentRequestV1> request)
+        {
+
+            var models = request.Select(x => new Student
+            {
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                GradeID = x.GradeID,
+                CreatedOn = DateTime.Now
+            }).ToList();
+
+            _context.AddRange(models);
+            _context.SaveChanges();
+
+
+
+
+
+            //for (int i = 0; i < request.Count; i++)
+            //{
+            //    Student model = new Student();
+            //    model.FirstName = request[i].FirstName;
+            //    model.LastName = request[i].LastName;
+            //    model.GradeID = request[i].GradeID;
+            //    model.CreatedOn = DateTime.Now;
+
+            //    _context.Students.Add(model);
+
+            //    _context.SaveChanges();
+            //}
+
+          
+     
+
+        }
+
+
+
+
 
         [HttpGet]
         public List<Student> GetStudentsByName(string name)
